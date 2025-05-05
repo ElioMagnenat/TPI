@@ -10,5 +10,14 @@ class BookController extends Controller {
         // Effectue un appel dynamique à la fonction en fonction de l'action
         return call_user_func((array($this, $action)));
     }
+
+    public function listBook(){
+        $view = file_get_contents(('view/page/book/listBook.php'));
+        //Permet l'affichage des bonnes données
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+        return $content;
+    }
 }
 ?>

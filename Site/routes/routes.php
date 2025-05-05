@@ -10,9 +10,8 @@ class RoutesController {
     public function dispatch() {
         // Si aucun contrôleur n'est spécifié
         if (!isset($_GET['controller'])) {
-            // Définir le contrôleur et l'action pour aller sur la page d'accueil
             $_GET['controller'] = 'book';
-            $_GET['action'] = 'catalog';
+            $_GET['action'] = 'listBook';
         }
 
         // Appeler la fonction pour sélectionner le contrôleur et le retourner
