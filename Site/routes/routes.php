@@ -1,8 +1,8 @@
 <?php
 // Importer les contrôleurs
 include_once('./controller/Controller.php');
-include_once('./controller/WineController.php');
-include_once('./controller/AccountController.php');
+include_once('./controller/BookController.php');
+include_once('./controller/StudentController.php');
 
 // Classe du contrôleur principal du fichier index.php
 class RoutesController {
@@ -10,16 +10,9 @@ class RoutesController {
     public function dispatch() {
         // Si aucun contrôleur n'est spécifié
         if (!isset($_GET['controller'])) {
-            if((!isset($_SESSION["user"]["user_id"]) || empty($_SESSION["user"]["user_id"])))
-            {
-                $_GET['controller'] = 'account';
-                $_GET['action'] = 'connectForm';
-            }
-            else{
-                // Définir le contrôleur et l'action pour aller sur la page d'accueil
-                $_GET['controller'] = 'wine';
-                $_GET['action'] = 'listeWine';
-            }
+            // Définir le contrôleur et l'action pour aller sur la page d'accueil
+            $_GET['controller'] = 'book';
+            $_GET['action'] = 'catalog';
         }
 
         // Appeler la fonction pour sélectionner le contrôleur et le retourner
@@ -30,11 +23,11 @@ class RoutesController {
     // Fonction pour sélectionner le bon contrôleur et l'instancier
     protected function selectController($controller) {
         switch ($controller) {
-            case 'wine' :
-                $link = new WineController();
+            case 'book' :
+                $link = new BookController();
                 break;
-            case 'account' :
-                $link = new AccountController();
+            case 'student' :
+                $link = new StudentController();
                 break;
         }
         return $link;
