@@ -12,6 +12,8 @@ class BookController extends Controller {
     }
 
     public function listBook(){
+        $BookRepository = new BookRepository();
+        $list = $BookRepository->getBooks();
         $view = file_get_contents(('view/page/book/listBook.php'));
         //Permet l'affichage des bonnes données
         ob_start();

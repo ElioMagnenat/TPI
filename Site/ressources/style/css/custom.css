@@ -2,7 +2,12 @@
     font-size: 3rem !important;
 }
 .action-icon{
-    height: 15px;
+    height: 25px;
+    width: 24px;
+}
+.action-icon-add{
+    height: 21px;
+    width: 21px;
 }
 .logo {
     height: 60px;
@@ -64,11 +69,6 @@ input[type="file"]:focus+.custom-file-upload {
 
 .custom-file-label::after {
     content: "Choisir";
-}
-
-.action-icon {
-    height: 25px;
-    width: 25px;
 }
 
 .detail-card {
