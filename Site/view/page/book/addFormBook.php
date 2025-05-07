@@ -5,7 +5,6 @@
         </div>
         <div class="card-body">
             <form id="addFormBook" method="post" action="?controller=book&action=addBook" enctype="multipart/form-data">
-                
                 <div class="mb-3">
                     <label for="title" class="form-label">Titre</label>
                     <input class="form-control" name="title" id="title" placeholder="Titre du livre">

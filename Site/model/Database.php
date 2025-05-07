@@ -48,6 +48,7 @@ class Database
     {
         $req = $this->connector->prepare("
             SELECT 
+                book.id_book,
                 book.title,
                 book.author,
                 book.edition,
@@ -81,6 +82,41 @@ class Database
             book (id_book, title, author, edition, reference, location, comment, photo, fk_category, fk_status)
             VALUES (NULL, :title, :author, :edition, :reference, :location, :comment, :photo, :fk_category, :fk_status)
         ");
+        $req->bindValue('title', $title, PDO::PARAM_STR);
+        $req->bindValue('author', $author, PDO::PARAM_STR);
+        $req->bindValue('edition', $edition, PDO::PARAM_STR);
+        $req->bindValue('reference', $reference, PDO::PARAM_STR);
+        $req->bindValue('location', $location, PDO::PARAM_STR);
+        $req->bindValue('comment', $comment, PDO::PARAM_STR);
+        $req->bindValue('photo', $photo, PDO::PARAM_STR);
+        $req->bindValue('fk_category', $fk_category, PDO::PARAM_INT);
+        $req->bindValue('fk_status', $fk_status, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function getBook ($id_book)
+    {
+        $req = $this->connector->prepare("SELECT * FROM book WHERE id_book = :id_book");
+        $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function updateBook ($id_book, $title,$author,$edition,$reference,$location,$comment,$photo,$fk_category, $fk_status)
+    {
+        $req = $this->connector->prepare("
+            UPDATE book SET 
+                title = :title, 
+                author = :author, 
+                edition = :edition, 
+                reference = :reference, 
+                location = :location, 
+                comment = :comment, 
+                photo = :photo, 
+                fk_category = :fk_category,
+                fk_status = :fk_status
+            WHERE id_book = :id_book
+        ");
+        $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
         $req->bindValue('title', $title, PDO::PARAM_STR);
         $req->bindValue('author', $author, PDO::PARAM_STR);
         $req->bindValue('edition', $edition, PDO::PARAM_STR);

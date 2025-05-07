@@ -24,4 +24,18 @@ class BookRepository {
         $db->disconnect();
         $db->clearCash($req);
     }
+    public function getBook ($id_book){
+        $db = new Database();
+        $req = $db->getBook($id_book);
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
+    public function updateBook ($id_book, $title,$author,$edition,$reference,$location,$comment,$photo,$fk_category, $fk_status){
+        $db = new Database();
+        $req = $db->updateBook($id_book, $title,$author,$edition,$reference,$location,$comment,$photo,$fk_category, $fk_status);
+        $db->disconnect();
+        $db->clearCash($req);
+    }
 }
