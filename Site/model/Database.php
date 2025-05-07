@@ -68,4 +68,29 @@ class Database
         $req->execute();
         return $req;
     }
+    public function getCategories ()
+    {
+        $req = $this->connector->prepare("SELECT * FROM category");
+        $req->execute();
+        return $req;
+    }
+    public function addBook ($title,$author,$edition,$reference,$location,$comment,$photo,$fk_category, $fk_status)
+    {
+        $req = $this->connector->prepare("
+            INSERT INTO 
+            book (id_book, title, author, edition, reference, location, comment, photo, fk_category, fk_status)
+            VALUES (NULL, :title, :author, :edition, :reference, :location, :comment, :photo, :fk_category, :fk_status)
+        ");
+        $req->bindValue('title', $title, PDO::PARAM_STR);
+        $req->bindValue('author', $author, PDO::PARAM_STR);
+        $req->bindValue('edition', $edition, PDO::PARAM_STR);
+        $req->bindValue('reference', $reference, PDO::PARAM_STR);
+        $req->bindValue('location', $location, PDO::PARAM_STR);
+        $req->bindValue('comment', $comment, PDO::PARAM_STR);
+        $req->bindValue('photo', $photo, PDO::PARAM_STR);
+        $req->bindValue('fk_category', $fk_category, PDO::PARAM_INT);
+        $req->bindValue('fk_status', $fk_status, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
 }

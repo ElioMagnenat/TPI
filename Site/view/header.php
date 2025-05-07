@@ -6,7 +6,7 @@
         <hr class="sidebar-divider my-0">
         <hr class="sidebar-divider">
         <li class="nav-item">
-            <a class="nav-link d-flex align-items-center" href="">
+            <a class="nav-link d-flex align-items-center" href="?controller=book&action=listBook">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Catalogue</span>
             </a>

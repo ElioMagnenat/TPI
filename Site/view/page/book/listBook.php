@@ -2,7 +2,7 @@
     <div class="card-header py-3 d-flex justify-content-between header-liste">
         <h3 class="m-0 font-weight-bold text-primary">Catalogue</h3>
         <div>
-            <button onclick="location.href='?controller=wine&action=addWineForm'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>       
+            <button onclick="location.href='?controller=book&action=addFormBook'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>       
         </div>
     </div>
 
