@@ -10,7 +10,7 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>Catalogue</span>
             </a>
-            <a class="nav-link d-flex align-items-center" href="">
+            <a class="nav-link d-flex align-items-center" href="?controller=student&action=listStudent">
                 <i class="fas fa-users"></i>
                 <span>Élèves</span>
             </a>

@@ -44,6 +44,7 @@ class Database
     public function formatData($req) {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
+    //Books section
     public function getBooks ()
     {
         $req = $this->connector->prepare("
@@ -129,4 +130,46 @@ class Database
         $req->execute();
         return $req;
     }
+
+    //Students section
+    public function getStudents ()
+    {
+        $req = $this->connector->prepare("
+            SELECT 
+                id_student,
+                lastname,
+                firstname,
+                birthdate,
+                institution,
+                entry_date,
+                validity_date
+            FROM 
+                student
+        ");
+        $req->execute();
+        return $req;
+    }
+    public function addStudent($lastname, $firstname, $birthdate, $institution, $entry_date, $validity_date, $phone, $comment, $address, $photo)
+{
+    $req = $this->connector->prepare("
+        INSERT INTO 
+        student (id_student, lastname, firstname, birthdate, institution, entry_date, validity_date, phone, comment, address, photo)
+        VALUES (NULL, :lastname, :firstname, :birthdate, :institution, :entry_date, :validity_date, :phone, :comment, :address, :photo)
+    ");
+    $req->bindValue('lastname', $lastname, PDO::PARAM_STR);
+    $req->bindValue('firstname', $firstname, PDO::PARAM_STR);
+    $req->bindValue('birthdate', $birthdate, $birthdate ? PDO::PARAM_STR : PDO::PARAM_NULL);
+    $req->bindValue('institution', $institution, PDO::PARAM_STR);
+    $req->bindValue('entry_date', $entry_date, PDO::PARAM_STR);
+    $req->bindValue('validity_date', $validity_date, PDO::PARAM_STR);
+    $req->bindValue('phone', $phone, PDO::PARAM_STR);
+    $req->bindValue('comment', $comment, PDO::PARAM_STR);
+    $req->bindValue('address', $address, PDO::PARAM_STR);
+    $req->bindValue('photo', $photo, PDO::PARAM_STR);
+    $req->execute();
+    return $req;
+}
+
+    
+
 }

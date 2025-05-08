@@ -105,7 +105,5 @@ class BookController extends Controller {
         );
         header("Location: ?controller=book&action=listBook");
     }
-    
-
 }
 ?>
