@@ -38,4 +38,20 @@ class BookRepository {
         $db->disconnect();
         $db->clearCash($req);
     }
+    public function getCategory ($id_category){
+        $db = new Database();
+        $req = $db->getCategory($id_category);
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
+    public function removeBook ($id_book){
+        $db = new Database();
+        $req = $db->removeBook($id_book);
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
 }

@@ -4,7 +4,7 @@
             <h4 class="mb-0">Ajouter un livre</h4>
         </div>
         <div class="card-body">
-            <form id="addFormBook" method="post" action="?controller=book&action=addBook" enctype="multipart/form-data">
+            <form id="formBook" method="post" action="?controller=book&action=addBook" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Titre</label>
                     <input class="form-control" name="title" id="title" placeholder="Titre du livre">

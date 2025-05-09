@@ -4,7 +4,7 @@
             <h4 class="mb-0">Modifier un livre</h4>
         </div>
         <div class="card-body">
-            <form id="editFormBook" method="post" action="?controller=book&action=updateBook&id=<?= $book[0]['id_book'] ?>" enctype="multipart/form-data">
+            <form id="formBook" method="post" action="?controller=book&action=updateBook&id=<?= $book[0]['id_book'] ?>" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Titre</label>
                     <input class="form-control" name="title" id="title" value="<?= $book[0]['title']?>" placeholder="Titre du livre">

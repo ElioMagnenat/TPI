@@ -130,6 +130,20 @@ class Database
         $req->execute();
         return $req;
     }
+    public function getCategory ($id_category)
+    {
+        $req = $this->connector->prepare("SELECT name FROM category WHERE id_category = :id_category");
+        $req->bindValue('id_category', $id_category, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function removeBook ($id_book)
+    {
+        $req = $this->connector->prepare("DELETE FROM book WHERE id_book = :id_book");
+        $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
 
     //Students section
     public function getStudents ()
@@ -139,7 +153,6 @@ class Database
                 id_student,
                 lastname,
                 firstname,
-                birthdate,
                 institution,
                 entry_date,
                 validity_date
@@ -150,26 +163,70 @@ class Database
         return $req;
     }
     public function addStudent($lastname, $firstname, $birthdate, $institution, $entry_date, $validity_date, $phone, $comment, $address, $photo)
-{
-    $req = $this->connector->prepare("
-        INSERT INTO 
-        student (id_student, lastname, firstname, birthdate, institution, entry_date, validity_date, phone, comment, address, photo)
-        VALUES (NULL, :lastname, :firstname, :birthdate, :institution, :entry_date, :validity_date, :phone, :comment, :address, :photo)
-    ");
-    $req->bindValue('lastname', $lastname, PDO::PARAM_STR);
-    $req->bindValue('firstname', $firstname, PDO::PARAM_STR);
-    $req->bindValue('birthdate', $birthdate, $birthdate ? PDO::PARAM_STR : PDO::PARAM_NULL);
-    $req->bindValue('institution', $institution, PDO::PARAM_STR);
-    $req->bindValue('entry_date', $entry_date, PDO::PARAM_STR);
-    $req->bindValue('validity_date', $validity_date, PDO::PARAM_STR);
-    $req->bindValue('phone', $phone, PDO::PARAM_STR);
-    $req->bindValue('comment', $comment, PDO::PARAM_STR);
-    $req->bindValue('address', $address, PDO::PARAM_STR);
-    $req->bindValue('photo', $photo, PDO::PARAM_STR);
-    $req->execute();
-    return $req;
-}
+    {
+        $req = $this->connector->prepare("
+            INSERT INTO 
+            student (id_student, lastname, firstname, birthdate, institution, entry_date, validity_date, phone, comment, address, photo)
+            VALUES (NULL, :lastname, :firstname, :birthdate, :institution, :entry_date, :validity_date, :phone, :comment, :address, :photo)
+        ");
+        $req->bindValue('lastname', $lastname, PDO::PARAM_STR);
+        $req->bindValue('firstname', $firstname, PDO::PARAM_STR);
+        $req->bindValue('birthdate', $birthdate, $birthdate ? PDO::PARAM_STR : PDO::PARAM_NULL);
+        $req->bindValue('institution', $institution, PDO::PARAM_STR);
+        $req->bindValue('entry_date', $entry_date, PDO::PARAM_STR);
+        $req->bindValue('validity_date', $validity_date, PDO::PARAM_STR);
+        $req->bindValue('phone', $phone, PDO::PARAM_STR);
+        $req->bindValue('comment', $comment, PDO::PARAM_STR);
+        $req->bindValue('address', $address, PDO::PARAM_STR);
+        $req->bindValue('photo', $photo, PDO::PARAM_STR);
+        $req->execute();
+        return $req;
+    }
+    public function getStudent ($id_student)
+    {
+        $req = $this->connector->prepare("SELECT * FROM student WHERE id_student = :id_student");
+        $req->bindValue('id_student', $id_student, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function updateStudent($id_student, $lastname, $firstname, $birthdate, $institution, $entry_date, $validity_date, $phone, $comment, $address, $photo)
+    {
+        $req = $this->connector->prepare("
+            UPDATE student SET 
+                lastname = :lastname,
+                firstname = :firstname,
+                birthdate = :birthdate,
+                institution = :institution,
+                entry_date = :entry_date,
+                validity_date = :validity_date,
+                phone = :phone,
+                comment = :comment,
+                address = :address,
+                photo = :photo
+            WHERE id_student = :id_student
+        ");
 
-    
+        $req->bindValue('id_student', $id_student, PDO::PARAM_INT);
+        $req->bindValue('lastname', $lastname, PDO::PARAM_STR);
+        $req->bindValue('firstname', $firstname, PDO::PARAM_STR);
+        $req->bindValue('birthdate', $birthdate, $birthdate ? PDO::PARAM_STR : PDO::PARAM_NULL);
+        $req->bindValue('institution', $institution, PDO::PARAM_STR);
+        $req->bindValue('entry_date', $entry_date, PDO::PARAM_STR);
+        $req->bindValue('validity_date', $validity_date, PDO::PARAM_STR);
+        $req->bindValue('phone', $phone, PDO::PARAM_STR);
+        $req->bindValue('comment', $comment, PDO::PARAM_STR);
+        $req->bindValue('address', $address, PDO::PARAM_STR);
+        $req->bindValue('photo', $photo, PDO::PARAM_STR);
+
+        $req->execute();
+        return $req;
+    }
+    public function removeStudent ($id_student)
+    {
+        $req = $this->connector->prepare("DELETE FROM student WHERE id_student = :id_student");
+        $req->bindValue('id_student', $id_student, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
 
 }

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("addFormBook");
+    const form = document.getElementById("formBook");
   
     form.addEventListener("submit", function (event) {
       let isValid = true;

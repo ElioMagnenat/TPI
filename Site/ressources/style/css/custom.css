@@ -9,6 +9,36 @@
     height: 21px;
     width: 21px;
 }
+.print-icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+@media print {
+    body, .print-icon, .btn {
+        visibility: hidden;
+    }
+
+    .detail-card, .detail-card {
+        visibility: visible;
+    }
+
+    .detail-card {
+        position: absolute;
+        width: 100%;
+        margin: auto;
+        box-shadow: none;
+    }
+
+    @page {
+        size: landscape;
+        margin: 1cm;
+    }
+}
+
+
+
+
 .logo {
     height: 60px;
     width: 60px;

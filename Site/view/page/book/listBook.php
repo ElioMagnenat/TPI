@@ -46,13 +46,13 @@
                                 <img class="action-icon-add" src="./ressources/style/img/add.png">
                             </a>
                         <?php } ?>
-                            <a href="voir.php?id=<?= $book['id_book'] ?>" title="Détail">
+                            <a href="?controller=book&action=detailBook&id=<?= $book['id_book'] ?>" title="Détail">
                                 <i class="fas fa-eye text-primary fa-lg"></i>
                             </a>
                             <a href="?controller=book&action=editFormBook&id=<?=$book['id_book'] ?>" title="Modifier">
                                 <i class="fas fa-edit text-primary fa-lg"></i>
                             </a>
-                            <a href="supprimer.php?id=<?= $book['id_book'] ?>" title="Supprimer" onclick="return confirm('Supprimer ce livre ?');">
+                            <a href="?controller=book&action=removeBook&id=<?=$book['id_book'] ?>" title="Supprimer" onclick="return confirm('Supprimer ce livre ?');">
                                 <i class="fas fa-trash text-primary fa-lg"></i>
                             </a>
                         </div>

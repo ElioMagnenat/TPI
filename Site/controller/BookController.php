@@ -77,12 +77,17 @@ class BookController extends Controller {
         $image_name = $book[0]['photo']; // Image actuelle
     
         // Si une nouvelle image est envoyée
-        if (isset($_FILES['picture']) && !empty($_FILES['picture'])) {
+        if(isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
+            $path_dir = "./ressources/img/book/";
+
+            if (!empty($image_name)){
+                unlink($path_dir . $image_name);
+            }
+
             $file_name = $_FILES['picture']['name'];
             $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
             $date = date("Ymd_His");
             $new_image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
-            $path_dir = "./ressources/img/book/";
             $imgPath = $path_dir . basename($new_image_name);
             
             if (move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath)) {
@@ -103,6 +108,27 @@ class BookController extends Controller {
             htmlspecialchars($_POST["category"]),
             $book[0]['fk_status']
         );
+        header("Location: ?controller=book&action=listBook");
+    }
+    public function detailBook() {
+        $BookRepository = new BookRepository();
+        $id_book=$_GET['id'];
+        $book = $BookRepository->getBook($id_book);
+        $category = $BookRepository->getCategory($book[0]['fk_category']);
+        $book[0]['category'] = $category[0]['name'] ;
+        $view = file_get_contents(('view/page/book/detailBook.php'));
+        //Permet l'affichage des bonnes données
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+        return $content;
+    }
+    public function removeBook() {
+        $BookRepository = new BookRepository();
+        $id_book=$_GET['id'];
+        $book = $BookRepository->removeBook($id_book);
+        $category = $BookRepository->getCategory($book[0]['fk_category']);
+        $book[0]['category'] = $category[0]['name'] ;
         header("Location: ?controller=book&action=listBook");
     }
 }
