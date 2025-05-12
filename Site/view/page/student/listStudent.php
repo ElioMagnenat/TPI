@@ -11,6 +11,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
+                    <th>Identifiant</th>
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Date d'entrée</th>
@@ -22,6 +23,7 @@
             <tbody>
                 <?php foreach ($list as $student): ?>
                 <tr>
+                    <td><?= $student['id_student'] ?></td>
                     <td><?= $student['lastname'] ?></td>
                     <td><?= $student['firstname'] ?></td>
                     <td><?= $student['entry_date'] ? (new DateTime($student['entry_date']))->format('d/m/Y') : '' ?></td>

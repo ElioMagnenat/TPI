@@ -1,5 +1,6 @@
 <?php
-include 'model/StudentRepository.php';
+require_once  'model/StudentRepository.php';
+require_once 'model/LoanRepository.php';
 // Classe pour le contrôleur des élèves
 class StudentController extends Controller {
     // Fonction pour récupérer l'action et appeler la bonne fonction
@@ -125,6 +126,8 @@ class StudentController extends Controller {
         $StudentRepository = new StudentRepository();
         $id_student=$_GET['id'];
         $student = $StudentRepository->getStudent($id_student);
+        $LoanRepository = new LoanRepository();
+        $loans = $LoanRepository->getStudentLoans($id_student);
         $view = file_get_contents(('view/page/student/detailStudent.php'));
         //Permet l'affichage des bonnes données
         ob_start();

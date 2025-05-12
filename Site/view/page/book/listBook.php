@@ -34,11 +34,11 @@
                     <td class="text-center">
                         <div class="d-flex justify-content-around gap-2">
                         <?php if($book['status']=="En rayon"){ ?>
-                            <a href="voir.php?id=<?= $book['id_book'] ?>" title="Emprunt">
+                            <a href="?controller=loan&action=loanFormBook&id=<?= $book['id_book'] ?>" title="Emprunt">
                                 <img class="action-icon" src="./ressources/style/img/borrow.png">
                             </a>
                         <?php } if($book['status']=="Emprunté"||$book['status']=="En retard") { ?>
-                            <a href="voir.php?id=<?= $book['id_book'] ?>" title="Rendu">
+                            <a href="?controller=loan&action=restoreFormBook&id=<?= $book['id_book'] ?>" title="Rendu">
                                 <img class="action-icon" src="./ressources/style/img/restore.png">
                             </a>
                         <?php } if($book['status']=="Retiré") { ?>

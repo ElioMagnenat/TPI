@@ -3,6 +3,7 @@
 include_once('./controller/Controller.php');
 include_once('./controller/BookController.php');
 include_once('./controller/StudentController.php');
+include_once('./controller/LoanController.php');
 
 // Classe du contrôleur principal du fichier index.php
 class RoutesController {
@@ -27,6 +28,9 @@ class RoutesController {
                 break;
             case 'student' :
                 $link = new StudentController();
+                break;
+            case 'loan' :
+                $link = new LoanController();
                 break;
         }
         return $link;

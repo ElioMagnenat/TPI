@@ -38,4 +38,12 @@ class StudentRepository {
         $db->clearCash($req);
         return $book;
     }
+    public function getStudentNames (){
+        $db = new Database();
+        $req = $db->getStudentNames();
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
 }

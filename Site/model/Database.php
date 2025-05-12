@@ -144,7 +144,25 @@ class Database
         $req->execute();
         return $req;
     }
-
+    public function getBookTitle ($id_book)
+    {
+        $req = $this->connector->prepare("SELECT id_book, title FROM book WHERE id_book = :id_book");
+        $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function updateStatus ($id_book,$fk_status)
+    {
+        $req = $this->connector->prepare("
+            UPDATE book SET 
+                fk_status = :fk_status
+            WHERE id_book = :id_book
+        ");
+        $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
+        $req->bindValue('fk_status', $fk_status, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
     //Students section
     public function getStudents ()
     {
@@ -228,5 +246,105 @@ class Database
         $req->execute();
         return $req;
     }
+    public function getStudentNames ()
+    {
+        $req = $this->connector->prepare("SELECT id_student, lastname, firstname FROM student");
+        $req->execute();
+        return $req;
+    }
 
+
+    // Loan
+    public function newLoan($start_date, $expected_return, $fk_student, $fk_book)
+    {
+        $req = $this->connector->prepare("
+            INSERT INTO 
+            loan (id_loan, start_date, expected_return_date, return_date, comment, fk_student, fk_book)
+            VALUES (NULL, :start_date, :expected_return, NULL, NULL, :fk_student, :fk_book)
+        ");
+        $req->bindValue('start_date', $start_date, PDO::PARAM_STR);
+        $req->bindValue('expected_return', $expected_return, PDO::PARAM_STR);
+        $req->bindValue('fk_student', $fk_student, PDO::PARAM_INT);
+        $req->bindValue('fk_book', $fk_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function closeLoan($id_loan, $return_date, $comment)
+    {
+        $req = $this->connector->prepare("
+            UPDATE loan SET 
+                return_date = :return_date,
+                comment = :comment
+            WHERE id_loan = :id_loan
+        ");
+
+        $req->bindValue('id_loan', $id_loan, PDO::PARAM_INT);
+        $req->bindValue('return_date', $return_date, PDO::PARAM_STR);
+        $req->bindValue('comment', $comment, PDO::PARAM_STR);
+        $req->execute();
+        return $req;
+    }
+    public function getIdBook ($id_loan)
+    {
+        $req = $this->connector->prepare("SELECT fk_book FROM loan WHERE id_loan = :id_loan");
+        $req->bindValue('id_loan', $id_loan, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function getIdLoan ($fk_book)
+    {
+        $req = $this->connector->prepare("SELECT id_loan FROM loan WHERE fk_book = :fk_book");
+        $req->bindValue('fk_book', $fk_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function getBookLoans($fk_book)
+    {
+        $req = $this->connector->prepare("
+            SELECT 
+                student.id_student,
+                student.firstname,
+                student.lastname,
+                loan.start_date,
+                loan.expected_return_date,
+                loan.return_date,
+                loan.comment
+            FROM 
+                loan
+            JOIN 
+                student ON loan.fk_student = student.id_student
+            WHERE 
+                loan.fk_book = :fk_book
+            ORDER BY 
+                loan.start_date DESC
+
+        ");
+        $req->bindValue('fk_book', $fk_book, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function getStudentLoans($fk_student)
+    {
+        $req = $this->connector->prepare("
+            SELECT 
+                loan.id_loan,
+                book.title,
+                loan.start_date,
+                loan.expected_return_date,
+                loan.return_date,
+                loan.comment,
+                loan.fk_book
+            FROM 
+                loan
+            JOIN 
+                book ON loan.fk_book = book.id_book
+            WHERE 
+                loan.fk_student = :fk_student
+            ORDER BY    
+                loan.start_date DESC
+    ");
+        $req->bindValue('fk_student', $fk_student, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
 }

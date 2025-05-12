@@ -54,4 +54,20 @@ class BookRepository {
         $db->clearCash($req);
         return $book;
     }
+    public function getBookTitle ($id_book){
+        $db = new Database();
+        $req = $db->getBookTitle($id_book);
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
+    public function updateStatus ($id_book,$fk_status){
+        $db = new Database();
+        $req = $db->updateStatus($id_book,$fk_status);
+        $db->disconnect();
+        $book = $db->formatData($req);
+        $db->clearCash($req);
+        return $book;
+    }
 }

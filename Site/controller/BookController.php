@@ -1,5 +1,6 @@
 <?php
-include 'model/BookRepository.php';
+require_once 'model/BookRepository.php';
+require_once 'model/LoanRepository.php';
 // Classe pour le contrôleur des livres
 class BookController extends Controller {
     // Fonction pour récupérer l'action et appeler la bonne fonction
@@ -116,6 +117,9 @@ class BookController extends Controller {
         $book = $BookRepository->getBook($id_book);
         $category = $BookRepository->getCategory($book[0]['fk_category']);
         $book[0]['category'] = $category[0]['name'] ;
+
+        $LoanRepository = new LoanRepository();
+        $loans = $LoanRepository->getBookLoans($id_book);
         $view = file_get_contents(('view/page/book/detailBook.php'));
         //Permet l'affichage des bonnes données
         ob_start();

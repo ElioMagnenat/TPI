@@ -10,6 +10,7 @@
                     <img src="./ressources/style/img/print.png" alt="icone d'imprimante">
                 </a>
                 <h2 class="card-title mb-3"><?= $student[0]['firstname'] . " " . $student[0]['lastname'] ?></h2>
+                <p><strong>Identifiant :</strong> <?= $student[0]['id_student'] ?></p>
                 <p><strong>Date de naissance :</strong> <?= (new DateTime($student[0]['birthdate']))->format('d/m/Y') ?></p>
                 <p><strong>Institution :</strong> <?= $student[0]['institution'] ?></p>
                 <p><strong>Date d'entrée :</strong> <?= (new DateTime($student[0]['entry_date']))->format('d/m/Y') ?></p>
@@ -26,3 +27,69 @@
         </div>        
     </div>
 </div>
+<div class="card shadow mb-4 mt-4">
+    <div class="card-header py-3 d-flex justify-content-between header-liste">
+        <h3 class="m-0 font-weight-bold text-primary">Livres empruntés</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="studentLoanTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date d'emprunt</th>
+                        <th>Rendu prévu</th>
+                        <th>Date de rendu</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($loans as $loan): ?>
+                        <tr>
+                            <td>
+                                <a href="?controller=book&action=detailBook&id=<?= urlencode($loan['fk_book']) ?>">
+                                    <?= htmlspecialchars($loan['title']) ?>
+                                </a>
+                            </td>
+                            <td><?= (new DateTime($loan['start_date']))->format('d/m/Y') ?></td>
+                            <td><?= (new DateTime($loan['expected_return_date']))->format('d/m/Y') ?></td>
+                            <td><?= $loan['return_date'] ? (new DateTime($loan['return_date']))->format('d/m/Y') : '-' ?></td>
+                            <td><?= htmlspecialchars($loan['comment']) ?: '-' ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#studentLoanTable').DataTable({
+            columnDefs: [
+                { type: 'date-euro', targets: [1, 2, 3] }
+            ],
+            paging: true,
+            searching: true,
+            info: true,
+            lengthChange: true,
+            ordering: true,
+            autoWidth: false,
+            scrollX: true,
+            language: {
+                search: "Rechercher :",
+                zeroRecords: "Aucun emprunt trouvé",
+                lengthMenu: "Afficher _MENU_ entrées",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ emprunts",
+                infoFiltered: "(filtré à partir de _MAX_ entrées)",
+                infoEmpty: "Aucune entrée disponible",
+                paginate: {
+                    first: "Premier",
+                    last: "Dernier",
+                    next: "Suivant",
+                    previous: "Précédent"
+                }
+            }
+        });
+    });
+</script>
