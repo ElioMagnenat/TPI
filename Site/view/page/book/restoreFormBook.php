@@ -4,7 +4,7 @@
             <h4 class="mb-0">Rendre <q><?= $bookTitle[0]['title'] ?></q></h4>
         </div>
         <div class="card-body">
-            <form id="formReturn" method="post" action="?controller=loan&action=closeLoan&id=<?= $id_loan[0]['id_loan'] ?>">
+            <form id="formRestore" method="post" action="?controller=loan&action=closeLoan&id=<?= $id_loan[0]['id_loan'] ?>">
                 <div class="mb-3">
                     <label for="returnDate" class="form-label">Date de rendu</label>
                     <input type="date" class="form-control" name="returnDate" id="returnDate" value="<?= date('Y-m-d') ?>">

@@ -53,24 +53,13 @@
     // Initialiser DataTables
     $(document).ready(function() {
         $('#dataTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    text: 'Exporter en PDF',
-                    className: 'export-pdf-btn',
-                    exportOptions: {
-                        columns: ':not(:last-child)'
-                    }
-                }
-            ],
             columnDefs: [
-                { type: 'date-euro', targets: [2, 3] }
+                { type: 'date-euro', targets: [3, 4] }
             ],
             paging: true,
             searching: true,
             info: true,
-            lengthChange: true,
+            lengthChange: false,
             ordering: true,
             autoWidth: false,
             scrollX: true,
@@ -79,7 +68,7 @@
                 zeroRecords: "Aucun élève trouvé",
                 lengthMenu: "Afficher _MENU_ entrées",
                 info: "Affichage de _START_ à _END_ sur _TOTAL_ élèves",
-                infoFiltered: "(filtré à partir de _MAX_ entrées)",
+                infoFiltered: "(filtré à partir de _MAX_ élèves)",
                 infoEmpty: "Aucune entrée disponible",
                 paginate: {
                     first: "Premier",

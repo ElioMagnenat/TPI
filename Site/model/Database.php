@@ -97,7 +97,28 @@ class Database
     }
     public function getBook ($id_book)
     {
-        $req = $this->connector->prepare("SELECT * FROM book WHERE id_book = :id_book");
+    $req = $this->connector->prepare("
+            SELECT 
+                book.id_book,
+                book.title,
+                book.author,
+                book.edition,
+                category.name AS category,
+                book.reference,
+                book.location,
+                book.comment,
+                book.photo,
+                status.name AS status
+            FROM 
+                book
+            JOIN 
+                category ON book.fk_category = category.id_category
+            JOIN 
+                status ON book.fk_status = status.id_status
+            WHERE 
+                book.id_book = :id_book
+        ");
+
         $req->bindValue('id_book', $id_book, PDO::PARAM_INT);
         $req->execute();
         return $req;
@@ -344,6 +365,12 @@ class Database
                 loan.start_date DESC
     ");
         $req->bindValue('fk_student', $fk_student, PDO::PARAM_INT);
+        $req->execute();
+        return $req;
+    }
+    public function getLoans ()
+    {
+        $req = $this->connector->prepare("SELECT start_date, expected_return_date, return_date, fk_book FROM loan");
         $req->execute();
         return $req;
     }

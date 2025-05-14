@@ -14,6 +14,13 @@ class BookController extends Controller {
 
     public function listBook(){
         $BookRepository = new BookRepository();
+        $LoanRepository = new LoanRepository();
+        $loans = $LoanRepository->getLoans();
+        foreach($loans as $loan){
+            if($loan['return_date']== NULL && strtotime($loan['expected_return_date']) < time()){
+                    $BookRepository->updateStatus($loan['fk_book'],3);
+            }
+        }
         $list = $BookRepository->getBooks();
         $view = file_get_contents(('view/page/book/listBook.php'));
         //Permet l'affichage des bonnes données
@@ -76,6 +83,7 @@ class BookController extends Controller {
         $BookRepository = new BookRepository();
         $book = $BookRepository->getBook($id_book);
         $image_name = $book[0]['photo']; // Image actuelle
+        $status = $book[0]['fk_status'];
     
         // Si une nouvelle image est envoyée
         if(isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
@@ -95,8 +103,9 @@ class BookController extends Controller {
                 $image_name = $new_image_name;
             }
         }
-    
-        // Appel au Repository pour mettre à jour le livre
+        if(isset($_POST['removeBook']) && $_POST['removeBook'] == 'on'){
+            $status=4;
+        }
         $BookRepository->updateBook(
             $id_book,
             htmlspecialchars($_POST["title"]),
@@ -107,7 +116,7 @@ class BookController extends Controller {
             htmlspecialchars($_POST["comment"]),
             $image_name,
             htmlspecialchars($_POST["category"]),
-            $book[0]['fk_status']
+            $status
         );
         header("Location: ?controller=book&action=listBook");
     }
@@ -115,9 +124,6 @@ class BookController extends Controller {
         $BookRepository = new BookRepository();
         $id_book=$_GET['id'];
         $book = $BookRepository->getBook($id_book);
-        $category = $BookRepository->getCategory($book[0]['fk_category']);
-        $book[0]['category'] = $category[0]['name'] ;
-
         $LoanRepository = new LoanRepository();
         $loans = $LoanRepository->getBookLoans($id_book);
         $view = file_get_contents(('view/page/book/detailBook.php'));
@@ -133,6 +139,12 @@ class BookController extends Controller {
         $book = $BookRepository->removeBook($id_book);
         $category = $BookRepository->getCategory($book[0]['fk_category']);
         $book[0]['category'] = $category[0]['name'] ;
+        header("Location: ?controller=book&action=listBook");
+    }
+    public function reinstate() {
+        $id_book=htmlspecialchars($_GET['id']);
+        $BookRepository = new BookRepository();
+        $BookRepository->updateStatus($id_book, 1);
         header("Location: ?controller=book&action=listBook");
     }
 }

@@ -46,4 +46,12 @@ class LoanRepository {
         $db->clearCash($req);
         return $loans;
     }
+    public function getLoans() {
+        $db = new Database();
+        $req = $db->getLoans();
+        $db->disconnect();
+        $loans = $db->formatData($req);
+        $db->clearCash($req);
+        return $loans;
+    }
 }

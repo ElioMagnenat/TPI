@@ -64,7 +64,10 @@
                     </div>
                     <span id="errorPicture" class="invalid-feedback" style="display: none;"></span>
                 </div>
-
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="removeBook" name="removeBook">
+                    <label class="form-check-label" for="removeBook">Retirer le livre</label>
+                </div>
                 <div>
                     <button type="submit" class="btn btn-outline-primary mt-3">Enregistrer les modifications</button>
                 </div>

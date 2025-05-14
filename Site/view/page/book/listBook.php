@@ -5,7 +5,6 @@
             <button onclick="location.href='?controller=book&action=addFormBook'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>       
         </div>
     </div>
-
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -42,7 +41,7 @@
                                 <img class="action-icon" src="./ressources/style/img/restore.png">
                             </a>
                         <?php } if($book['status']=="Retiré") { ?>
-                            <a href="voir.php?id=<?= $book['id_book'] ?>" title="Ajouter">
+                            <a href="?controller=book&action=reinstate&id=<?= $book['id_book'] ?>" title="Ajouter" onclick="return confirm('Remettre ce livre dans les rayons ?');">
                                 <img class="action-icon-add" src="./ressources/style/img/add.png">
                             </a>
                         <?php } ?>
@@ -65,22 +64,18 @@
     </div>
 </div>
 <script>
-    // Initialiser DataTables
-    $(document).ready(function() {
-    $('#dataTable').DataTable({
+$(document).ready(function() {
+    var table = $('#dataTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
-        {
-            extend: 'pdfHtml5',
-            text: 'Exporter en PDF',
-            className: 'export-pdf-btn',
-            exportOptions: {
-                columns: ':not(:last-child)'
-            },
-            paging: true,  // Enable pagination
-            lengthMenu: [5, 10, 25, 50, 100],  // Options for the number of rows per page
-            pageLength: 10,  // Default number of rows per page
-        }
+            {
+                extend: 'pdfHtml5',
+                text: 'Exporter en PDF',
+                className: 'export-pdf-btn',
+                exportOptions: {
+                    columns: ':not(:last-child)'
+                }
+            }
         ],
         paging: true,
         searching: true,
@@ -94,7 +89,7 @@
             zeroRecords: "Aucun livre trouvé",
             lengthMenu: "Afficher _MENU_ entrées",
             info: "Affichage de _START_ à _END_ sur _TOTAL_ livres",
-            infoFiltered: "(filtré à partir de _MAX_ entrées)",
+            infoFiltered: "(filtré à partir de _MAX_ livres)",
             infoEmpty: "Aucune entrée disponible",
             paginate: {
                 first: "Premier",
@@ -104,6 +99,43 @@
             }
         }
     });
-});
 
+    var activeFilters = ["En rayon", "Emprunté", "En retard"];
+
+    const btnsHtml = `
+        <span class="d-flex align-items-center text-muted">
+            <i class="fas fa-filter me-2"></i>Filtres :
+        </span>
+        <button type="button" class="btn filter-btn active btn-primary" data-filter="En rayon">En rayon</button>
+        <button type="button" class="btn filter-btn active btn-primary" data-filter="Emprunté">Emprunté</button>
+        <button type="button" class="btn filter-btn active btn-primary" data-filter="En retard">En retard</button>
+        <button type="button" class="btn filter-btn btn-outline-secondary" data-filter="Retiré">Retiré</button>
+    `;
+    $('.dataTables_filter').append(btnsHtml);
+
+    // Appliquer le filtre initial
+    table.column(6).search(activeFilters.join('|'), true, false).draw();
+
+    // Gestion des clics
+    $(document).on('click', '.filter-btn', function () {
+        var filter = $(this).data('filter');
+        var index = activeFilters.indexOf(filter);
+
+        // Toggle
+        if (index === -1) {
+            activeFilters.push(filter);
+            $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
+        } else {
+            activeFilters.splice(index, 1);
+            $(this).removeClass('active btn-primary').addClass('btn-outline-secondary');
+        }
+
+        // Appliquer le filtre combiné
+        if (activeFilters.length > 0) {
+            table.column(6).search(activeFilters.join('|'), true, false).draw();
+        } else {
+            table.column(6).search('').draw();
+        }
+    });
+});
 </script>

@@ -25,7 +25,7 @@
                 <div class="mb-3">
                     <label for="expectedReturnDate" class="form-label">Date prévue de retour</label>
                     <input type="date" class="form-control" name="expectedReturnDate" id="expectedReturnDate" value ="<?php echo date('Y-m-d', strtotime('+1 month'));?>">
-                    <span id="errorExpectedReturnDate" class="invalid-feedback" style="display: none;">Veuillez indiquer une date de retour</span>
+                    <span id="errorExpectedReturnDate" class="invalid-feedback" style="display: none;"></span>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-outline-primary mt-3">Enregistrer l'emprunt</button>

@@ -1,88 +1,53 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const addForm = document.getElementById("addFormStudent");
-  const editForm = document.getElementById("editFormStudent");
+document.getElementById('formLoan').addEventListener('submit', function(event) {
+    // Récupération des champs
+    const studentId = document.getElementById('studentId');
+    const startDate = document.getElementById('startDate');
+    const expectedReturnDate = document.getElementById('expectedReturnDate');
 
-  [addForm, editForm].forEach(form => {
-    if (!form) return;
-    form.addEventListener("submit", function (event) {
-      let isValid = true;
+    // Messages d'erreur
+    const errorStudentId = document.getElementById('errorStudentId');
+    const errorStartDate = document.getElementById('errorStartDate');
+    const errorExpectedReturnDate = document.getElementById('errorExpectedReturnDate');
 
-      // Réinitialise les messages d'erreur
-      clearError("lastname");
-      clearError("firstname");
-      clearError("entry_date");
-      clearError("validity_date");
-      clearError("picture");
+    // Réinitialisation
+    errorStudentId.style.display = 'none';
+    errorStartDate.style.display = 'none';
+    errorExpectedReturnDate.style.display = 'none';
 
-      // Vérifie le nom
-      const lastname = document.getElementById("lastname");
-      if (!lastname.value.trim()) {
-        showError("lastname", "Le nom est requis.");
-        isValid = false;
-      } else if (!isOnlyLetters(lastname.value)) {
-        showError("lastname", "Le nom doit contenir seulement des lettres.");
-        isValid = false;
-      }
+    let valid = true;
 
-      // Vérifie le prénom
-      const firstname = document.getElementById("firstname");
-      if (!firstname.value.trim()) {
-        showError("firstname", "Le prénom est requis.");
-        isValid = false;
-      } else if (!isOnlyLetters(firstname.value)) {
-        showError("firstname", "Le prénom doit contenir seulement des lettres.");
-        isValid = false;
-      }
-
-      // Vérifie la date d'entrée
-      const entryDate = document.getElementById("entry_date");
-      if (!entryDate.value) {
-        showError("entry_date", "Date d'entrée requise.");
-        isValid = false;
-      }
-
-      // Vérifie la date de validité
-      const validityDate = document.getElementById("validity_date");
-      if (!validityDate.value) {
-        showError("validity_date", "Date de validité requise.");
-        isValid = false;
-      }
-
-      // Vérifie la photo
-      const picture = document.getElementById("picture");
-      if (!picture.value && form.id !== "editFormStudent") {
-        showError("picture", "Une photo est requise.");
-        isValid = false;
-      }
-
-      if (!isValid) {
-        event.preventDefault();
-      }
-    });
-
-    function isOnlyLetters(str) {
-      return /^[a-zA-ZÀ-ÿ\s'-]+$/.test(str);
+    // Vérifie qu’un élève est sélectionné
+    if (studentId.value === '') {
+        errorStudentId.style.display = 'block';
+        valid = false;
     }
 
-    function showError(fieldId, message) {
-      const span = document.getElementById("error" + capitalize(fieldId));
-      if (span) {
-        span.textContent = message;
-        span.style.display = "block";
-      }
-      document.getElementById(fieldId).classList.add("is-invalid");
-    }
-    function clearError(fieldId) {
-      const span = document.getElementById("error" + capitalize(fieldId));
-      if (span) {
-        span.textContent = "";
-        span.style.display = "none";
-      }
-      document.getElementById(fieldId).classList.remove("is-invalid");
+    // Vérifie que la date d’emprunt est remplie
+    if (startDate.value === '') {
+        errorStartDate.style.display = 'block';
+        valid = false;
     }
 
-    function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
+    // Vérifie que la date de retour est remplie
+    if (expectedReturnDate.value === '') {
+        errorExpectedReturnDate.textContent = 'Veuillez indiquer une date de retour';
+        errorExpectedReturnDate.style.display = 'block';
+        valid = false;
     }
-  });
+
+    // Vérifie que la date de retour est après la date d’emprunt
+    if (startDate.value !== '' && expectedReturnDate.value !== '') {
+        const start = new Date(startDate.value);
+        const end = new Date(expectedReturnDate.value);
+
+        if (end <= start) {
+            errorExpectedReturnDate.textContent = 'La date de retour doit être après la date d\'emprunt';
+            errorExpectedReturnDate.style.display = 'block';
+            valid = false;
+        }
+    }
+
+    if (!valid) {
+        event.preventDefault(); // Empêche l'envoi si non valide
+    }
 });

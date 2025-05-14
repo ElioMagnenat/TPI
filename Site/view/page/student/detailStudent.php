@@ -3,7 +3,11 @@
     <div class="row g-0">
         <div class="card-body d-flex">
             <div class="col-md-5 d-flex align-items-center justify-content-center">
-                <img src="./ressources/img/student/<?= $student[0]['photo'] ?>" alt="Photo de l'élève" class="img-fluid rounded-start detail-image">
+                <?php if(isset($student[0]['photo'])&& $student[0]['photo'] != NULL) { ?>
+                    <img src="./ressources/img/student/<?= $student[0]['photo'] ?>" alt="Photo de l'élève" class="img-fluid rounded-start detail-image">
+                <?php } else {?>
+                    <img src="./ressources/style/img/defaultStudent.png" alt="Photo de l'élève" class="img-fluid rounded-start detail-image">
+                <?php }?>
             </div>
             <div class="col-md-7 position-relative">
                 <a href="" onclick="window.print()" class ="print-icon">

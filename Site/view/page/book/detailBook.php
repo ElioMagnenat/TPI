@@ -16,7 +16,7 @@
                     <p><strong>Catégorie :</strong> <?= $book[0]['category'] ?></p>
                     <p><strong>Référence :</strong> <?= $book[0]['reference'] ?></p>
                     <p><strong>Emplacement :</strong> <?= $book[0]['location']?></p>
-
+                    <p><strong>Statut :</strong> <?= $book[0]['status']?></p>
                     <?php if (!empty($book[0]['comment'])){ ?>
                         <p><strong>Remarque :</strong> <?= nl2br($book[0]['comment']) ?></p>
                     <?php }?>
