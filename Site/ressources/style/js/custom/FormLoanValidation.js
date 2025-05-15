@@ -1,4 +1,4 @@
-// Vérification du formulaire de **retour**
+// Vérification du formulaire de retour
 const formRestore = document.getElementById('formRestore');
 if (formRestore) {
     formRestore.addEventListener('submit', function(event) {
@@ -22,7 +22,7 @@ if (formRestore) {
     });
 }
 
-// Vérification du formulaire d'**emprunt**
+// Vérification du formulaire d'emprunt
 const formLoan = document.getElementById('formLoan');
 if (formLoan) {
     formLoan.addEventListener('submit', function(event) {

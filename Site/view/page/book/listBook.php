@@ -113,15 +113,11 @@ $(document).ready(function() {
     `;
     $('.dataTables_filter').append(btnsHtml);
 
-    // Appliquer le filtre initial
     table.column(6).search(activeFilters.join('|'), true, false).draw();
 
-    // Gestion des clics
     $(document).on('click', '.filter-btn', function () {
         var filter = $(this).data('filter');
         var index = activeFilters.indexOf(filter);
-
-        // Toggle
         if (index === -1) {
             activeFilters.push(filter);
             $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
@@ -129,8 +125,6 @@ $(document).ready(function() {
             activeFilters.splice(index, 1);
             $(this).removeClass('active btn-primary').addClass('btn-outline-secondary');
         }
-
-        // Appliquer le filtre combiné
         if (activeFilters.length > 0) {
             table.column(6).search(activeFilters.join('|'), true, false).draw();
         } else {

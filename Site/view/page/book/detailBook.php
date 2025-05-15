@@ -65,7 +65,6 @@
 <script>
 $(document).ready(function() {
     $('#loanTable').DataTable({
-        
         paging: true,
         searching: true,
         info: true,

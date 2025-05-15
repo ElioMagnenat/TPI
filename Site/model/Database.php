@@ -104,6 +104,7 @@ class Database
                 book.author,
                 book.edition,
                 category.name AS category,
+                category.id_category AS id_category,
                 book.reference,
                 book.location,
                 book.comment,

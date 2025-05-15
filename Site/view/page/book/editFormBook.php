@@ -26,9 +26,9 @@
                 <div class="mb-3">
                     <label for="category" class="form-label">Catégorie</label>
                     <select class="form-control" id="category" name="category">
-                        <option value="">-- Sélectionner une catégorie --</option>
+                        <option value="<?=$book[0]['id_category']?>"><?=$book[0]['category']?></option>
                         <?php foreach ($categories as $category): ?>
-                            <option value="<?= $category['id_category'] ?>" <?= $book[0]['fk_category'] == $category['id_category'] ? 'selected' : '' ?>>
+                            <option value="<?= $category['id_category'] ?>" <?= $book[0]['category'] == $category['id_category'] ? 'selected' : '' ?>>
                                 <?= $category['name'] ?>
                             </option>
                         <?php endforeach; ?>

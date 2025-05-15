@@ -127,7 +127,6 @@ class BookController extends Controller {
         $LoanRepository = new LoanRepository();
         $loans = $LoanRepository->getBookLoans($id_book);
         $view = file_get_contents(('view/page/book/detailBook.php'));
-        //Permet l'affichage des bonnes données
         ob_start();
         eval('?>' . $view);
         $content = ob_get_clean();
