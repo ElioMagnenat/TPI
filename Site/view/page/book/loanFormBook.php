@@ -25,8 +25,6 @@
         </ul>
     </div>
 <?php endif; ?>
-
-
         <div class="card-body">
             <form id="formLoan" method="post" action="?controller=loan&action=newLoan&ids=<?= htmlspecialchars($_GET['ids'] ?? $bookTitle[0]['id_book']) ?>">
                 <div class="mb-3">
