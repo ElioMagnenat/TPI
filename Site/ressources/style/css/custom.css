@@ -209,4 +209,53 @@ button.dt-button.export-pdf-btn:hover {
     border-color: #2653d4 !important;
 }
 
+table.dataTable tbody tr.selected {
+    border-left: 6px solid #4e73df; /* Bleu Bootstrap */
+    background-color: #f9f9fc !important; /* Optionnel : très léger fond */
+}
+table.dataTable tbody tr.selected td:nth-child(2) {
+    position: relative;
+}
+
+
+
+table.dataTable tbody tr.selected {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid transparent; /* positionne l’outline sans la montrer d'abord */
+    animation: outlineFade 0.3s ease-out forwards;
+}
+
+/* Animation fluide de l’outline */
+@keyframes outlineFade {
+    from {
+        outline-color: transparent;
+    }
+    to {
+        outline-color: #4e73df; /* Bleu Bootstrap */
+    }
+}
+
+
+table.dataTable tbody tr:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
+table.dataTable tbody td {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: 1px solid #dee2e6;  
+    border-right: 1px solid #dee2e6;
+}
+
+table.dataTable tbody tr.selected {
+    outline: 2px solid #4e73df;
+    outline-offset: -2px;
+}
+
+table.dataTable tbody tr {
+    transition: outline 0.2s ease;
+}
+
+
 

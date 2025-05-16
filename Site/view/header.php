@@ -43,12 +43,21 @@
 
                     <!-- Menu déroulant -->
                     <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="menuDropdown">
-                        <a class="dropdown-item d-flex align-items-center" href="">
-                        <i class="fas fa-file-import text-primary mr-2"></i> Importer
-                        </a>
+                        <!-- Importer -->
+                        <form action="?controller=book&action=importDatabase" method="post" enctype="multipart/form-data" class="m-0 p-0 w-100">
+                            <button type="button" class="dropdown-item d-flex align-items-center" onclick="document.getElementById('sqlUpload').click();">
+                                <i class="fas fa-file-import text-primary mr-2"></i>
+                                <span>Importer</span>
+                            </button>
+                            <input type="file" name="sql_file" accept=".sql" id="sqlUpload" onchange="this.form.submit()" style="display: none;">
+                        </form>
+
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item d-flex align-items-center" href="">
-                        <i class="fas fa-file-export text-primary mr-2"></i> Exporter
+
+                        <!-- Exporter -->
+                        <a class="dropdown-item d-flex align-items-center" href="?controller=book&action=exportDatabase">
+                            <i class="fas fa-file-export text-primary mr-2"></i>
+                            <span>Exporter</span>
                         </a>
                     </div>
                     </div>

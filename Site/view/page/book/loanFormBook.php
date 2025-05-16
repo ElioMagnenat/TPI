@@ -1,10 +1,34 @@
 <div class="container mt-4 mb-4">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Emprunter <q> <?= $bookTitle[0]['title']?> </q></h4>
+            <h4 class="mb-0">
+                Emprunter 
+                <?php if (count($bookTitle) === 1){ ?>
+                    <q><?= $bookTitle[0]['title'] ?></q>
+                <?php } ?>
+            </h4>
         </div>
+<?php if (!empty($bookTitle)): ?>
+    <div class="card border-start border-primary border-3 mb-4 shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 text-primary">
+                <i class="fas fa-book me-2"></i>
+                <?= count($bookTitle) === 1 ? 'Livre sélectionné' : 'Livres sélectionnés' ?>
+            </h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <?php foreach ($bookTitle as $book): ?>
+                <li class="list-group-item d-flex align-items-center">
+                    <span class="text-dark"><?= htmlspecialchars($book['title']) ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+
         <div class="card-body">
-            <form id="formLoan" method="post" action="?controller=loan&action=newLoan&id=<?= $bookTitle[0]['id_book'] ?>">
+            <form id="formLoan" method="post" action="?controller=loan&action=newLoan&ids=<?= htmlspecialchars($_GET['ids'] ?? $bookTitle[0]['id_book']) ?>">
                 <div class="mb-3">
                     <label for="studentId" class="form-label">Élève</label>
                     <select class="form-control" name="studentId" id="studentId">

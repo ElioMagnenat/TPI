@@ -2,7 +2,9 @@
     <div class="card-header py-3 d-flex justify-content-between header-liste">
         <h3 class="m-0 font-weight-bold text-primary">Catalogue</h3>
         <div>
-            <button onclick="location.href='?controller=book&action=addFormBook'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>       
+            <button onclick="location.href='?controller=book&action=addFormBook'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>
+            <button id="actionSelected" class="btn btn-outline-primary mt-3">Emprunter</button>
+       
         </div>
     </div>
     <div class="card-body">
@@ -22,7 +24,7 @@
             </thead>
             <tbody>
                 <?php foreach ($list as $book):?>
-                <tr>
+                <tr data-id="<?= $book['id_book'] ?>">
                     <td><?= $book['title'] ?></td>
                     <td><?= $book['author'] ?></td>
                     <td><?= $book['edition'] ?></td>
@@ -77,6 +79,10 @@ $(document).ready(function() {
                 }
             }
         ],
+        
+        select: {
+        style: 'multi'
+    },
         paging: true,
         searching: true,
         info: true,
@@ -96,6 +102,13 @@ $(document).ready(function() {
                 last: "Dernier",
                 next: "Suivant",
                 previous: "Précédent"
+            },
+            select: {
+                rows: {
+                    _: "%d lignes sélectionnées",     // Plusieurs lignes
+                    0: "Cliquez sur une ligne pour la sélectionner", // Aucune
+                    1: "1 ligne sélectionnée"          // Une seule
+                }
             }
         }
     });
@@ -131,5 +144,34 @@ $(document).ready(function() {
             table.column(6).search('').draw();
         }
     });
+    $('#actionSelected').on('click', function () {
+    var selectedRows = table.rows({ selected: true }).nodes();
+    var ids = [];
+
+    selectedRows.each(function (row) {
+        var id = $(row).data('id');
+        if (id) {
+            ids.push(id);
+        }
+    });
+
+    if (ids.length === 0) {
+        alert("Veuillez sélectionner au moins un livre.");
+        return;
+    }
+
+    window.location.href = "?controller=loan&action=loanFormBook&ids=" + ids.join(",");
 });
+table.on('user-select', function (e, dt, type, cell, originalEvent) {
+    if (type === 'row') {
+        var row = table.row(cell.index().row).node();
+        var status = $(row).find('td:eq(6)').text().trim(); // Colonne statut
+
+        if (status !== "En rayon") {
+            e.preventDefault(); // ❌ bloque la sélection
+        }
+    }
+});
+});
+
 </script>

@@ -40,16 +40,23 @@ class BookController extends Controller {
         $content = ob_get_clean();
         return $content;
     }
-    public function addBook(){
-        if (isset($_FILES['picture']) && !empty($_FILES['picture'])){
+    public function addBook() {
+        $image_name = "";
+        $path_dir = "./ressources/img/book/";
+
+        if (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
             $file_name = $_FILES['picture']['name'];
             $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $date = date("Ymd_His");
-            $image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
-            $path_dir = "./ressources/img/book/";
-            $imgPath = $path_dir . basename($image_name);
-            move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath);
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            if (in_array($fileType, $allowedTypes)) {
+                $date = date("Ymd_His");
+                $image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
+                $imgPath = $path_dir . $image_name;
+                move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath);
+            }
         }
+
         $status = 1;
         $BookRepository = new BookRepository();
         $BookRepository->addBook(
@@ -59,13 +66,14 @@ class BookController extends Controller {
             htmlspecialchars($_POST["reference"]),
             htmlspecialchars($_POST["location"]),
             htmlspecialchars($_POST["comment"]),
-            $imgPath,
+            $image_name,
             htmlspecialchars($_POST["category"]),
             $status
-        );        
-        header("Location: ?controller=book&action=listBook");
+        );
 
+        header("Location: ?controller=book&action=listBook");
     }
+
     public function editFormBook(){
         $BookRepository = new BookRepository();
         $id_book=$_GET['id'];
@@ -83,7 +91,8 @@ class BookController extends Controller {
         $BookRepository = new BookRepository();
         $book = $BookRepository->getBook($id_book);
         $image_name = $book[0]['photo']; // Image actuelle
-        $status = $book[0]['fk_status'];
+
+        $status = $book[0]['id_status'];
     
         // Si une nouvelle image est envoyée
         if(isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
@@ -144,6 +153,42 @@ class BookController extends Controller {
         $id_book=htmlspecialchars($_GET['id']);
         $BookRepository = new BookRepository();
         $BookRepository->updateStatus($id_book, 1);
+        header("Location: ?controller=book&action=listBook");
+    }
+    public function exportDatabase() {
+        $user = 'bibliosolidaire';
+        $pass = 'bibliosolidaire';
+        $db = 'db_bibliosolidaire';
+        $host = 'localhost';
+        $filename = 'export_biblio_' . date('Ymd_His') . '.sql';
+        $filePath = './ressources/exports/' . $filename;
+
+        $mysqldumpPath = './ressources/exports/mysqldump.exe';
+
+        $command = "\"$mysqldumpPath\" -h $host -u $user -p$pass $db > \"$filePath\"";
+
+        system($command);
+
+        if (file_exists($filePath)) {
+            header('Content-Description: File Transfer');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            readfile($filePath);
+            unlink($filePath);
+        }
+    }
+    public function importDatabase() {
+        if (isset($_FILES['sql_file'])) {
+            $tmpPath = $_FILES['sql_file']['tmp_name'];
+            $user = 'bibliosolidaire';
+            $pass = 'bibliosolidaire';
+            $db = 'db_bibliosolidaire';
+            $host = 'localhost';
+
+            $mysqlPath = realpath(__DIR__ . '/../ressources/import/mysql.exe');
+            $command = "cmd /c \"$mysqlPath\" -h $host -u $user -p$pass $db < \"$tmpPath\"";
+            system($command, $returnCode);
+        }
+
         header("Location: ?controller=book&action=listBook");
     }
 }

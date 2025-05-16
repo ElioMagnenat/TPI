@@ -54,9 +54,11 @@ class Database
                 book.author,
                 book.edition,
                 category.name AS category,
+                category.id_category,
                 book.reference,
                 book.location,
-                status.name AS status
+                status.name AS status,
+                status.id_status AS id_status
             FROM 
                 book
             JOIN 
@@ -109,7 +111,8 @@ class Database
                 book.location,
                 book.comment,
                 book.photo,
-                status.name AS status
+                status.name AS status,
+                status.id_status AS id_status
             FROM 
                 book
             JOIN 
@@ -375,4 +378,5 @@ class Database
         $req->execute();
         return $req;
     }
+
 }

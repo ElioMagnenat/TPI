@@ -140,11 +140,6 @@ class StudentController extends Controller {
         $id_student=$_GET['id'];
         $student = $StudentRepository->removeStudent($id_student);
         header("Location: ?controller=student&action=listStudent");
-        //Permet l'affichage des bonnes données
-        ob_start();
-        eval('?>' . $view);
-        $content = ob_get_clean();
-        return $content;
     }
 }
 ?>
