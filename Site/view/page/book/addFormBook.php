@@ -54,15 +54,28 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="picture" class="form-label">Photo</label>
+                    <label for="imageInput" class="form-label">Photo</label>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input name="picture" type="file" class="custom-file-input" id="picture" accept=".png, .jpg, .jpeg, .webp, .gif">
-                            <label class="custom-file-label" for="picture">Choisir une photo</label>
+                            <input name="picture" type="file" class="custom-file-input" id="imageInput" accept=".png, .jpg, .jpeg, .webp, .gif">
+                            <label class="custom-file-label" for="imageInput">Choisir une photo</label>
                         </div>
                         <button type="button" class="btn btn-outline-danger d-none" id="resetPicture">Retirer</button>
                     </div>
-                    <span id="errorPicture" class="invalid-feedback"></span>
+                    <span id="errorPicture" class="invalid-feedback d-block"></span>
+                    <span id="errorUserPicture" class="alert-danger d-block"></span>
+                </div>
+                    <input type="hidden" name="cropped_picture" id="croppedPicture">
+                <!-- Zone de crop -->
+                <div class="mb-3">
+                    <div id="imageCropContainer" class="mb-3" style="display:none;">
+                        <img id="imagePreview" style="max-width: 100%;">
+                    </div>
+
+                    <div id="cropControls" class="mb-3" style="display: none; flex-direction: column;">
+                        <label for="rotationRange">Rotation : <span id="rotationValue">0°</span></label>
+                        <input type="range" id="rotationRange" min="0" max="360" step="1" value="0">
+                    </div>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-outline-primary mt-3">Ajouter</button>
