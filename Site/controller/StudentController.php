@@ -30,47 +30,36 @@ class StudentController extends Controller {
         return $content;
     }
     public function addStudent() {
-        $imgPath = null;
-        if (isset($_FILES['picture']) && !empty($_FILES['picture']['name'])) {
-            $file_name = $_FILES['picture']['name'];
-            $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $date = date("Ymd_His");
-            $image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
-            $path_dir = "./ressources/img/student/";
-            $imgPath = $path_dir . basename($image_name);
-
-            move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath);
-        }
-    
-        // Sécurité des champs via htmlspecialchars
-        $lastname = htmlspecialchars($_POST["lastname"]);
-        $firstname = htmlspecialchars($_POST["firstname"]);
-        $birthdate = htmlspecialchars($_POST["birthdate"]);
-        $institution = htmlspecialchars($_POST["institution"]);
-        $entry_date = htmlspecialchars($_POST["entry_date"]);
-        $validity_date = htmlspecialchars($_POST["validity_date"]);
-        $phone = htmlspecialchars($_POST["phone"]);
-        $comment = htmlspecialchars($_POST["comment"]);
-        $address = htmlspecialchars($_POST["address"]);
-    
-        // Appel au Repository
-        $StudentRepository = new StudentRepository();
-        $StudentRepository->addStudent(
-            $lastname,
-            $firstname,
-            $birthdate,
-            $institution,
-            $entry_date,
-            $validity_date,
-            $phone,
-            $comment,
-            $address,
-            $imgPath
-        );
-    
-        // Redirection après ajout
-        header("Location: ?controller=student&action=listStudent");
+    $path_dir = "./ressources/img/student/";
+    $imgPath = null;
+    if (!empty($_POST['cropped_picture'])) {
+        $data = $_POST['cropped_picture'];
+        $data = str_replace('data:image/jpeg;base64,', '', $data);
+        $data = base64_decode($data);
+        $image_name = uniqid('student_', true) . '.jpg';
+        $imgPath = $image_name;
+        file_put_contents($path_dir.$imgPath, $data);
     }
+
+
+    // Enregistrement
+    $StudentRepository = new StudentRepository();
+    $StudentRepository->addStudent(
+        htmlspecialchars($_POST["lastname"]),
+        htmlspecialchars($_POST["firstname"]),
+        htmlspecialchars($_POST["birthdate"]),
+        htmlspecialchars($_POST["institution"]),
+        htmlspecialchars($_POST["entry_date"]),
+        htmlspecialchars($_POST["validity_date"]),
+        htmlspecialchars($_POST["phone"]),
+        htmlspecialchars($_POST["comment"]),
+        htmlspecialchars($_POST["address"]),
+        $imgPath
+    );
+
+    // Redirection
+    header("Location: ?controller=student&action=listStudent");
+}
     public function editFormStudent(){
         $StudentRepository = new StudentRepository();
         $id_student=$_GET['id'];
@@ -87,26 +76,41 @@ class StudentController extends Controller {
         $StudentRepository = new StudentRepository();
         $student = $StudentRepository->getStudent($id_student);
         $image_name = $student[0]['photo']; // Image actuelle
-    
-        if(isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
-            $path_dir = "./ressources/img/student/";
+        $path_dir = "./ressources/img/student/";
 
-            if (!empty($image_name)){
-                unlink($path_dir . $image_name);
+        if (!is_dir($path_dir)) {
+            mkdir($path_dir, 0755, true);
+        }
+
+        if (!empty($_POST['cropped_picture'])) {
+            if (!empty($image_name)) {
+                @unlink($path_dir . $image_name);
+            }
+
+            $data = $_POST['cropped_picture'];
+            $data = str_replace('data:image/jpeg;base64,', '', $data);
+            $data = base64_decode($data);
+            $new_image_name = uniqid('student_', true) . '.jpg';
+            $imgPath = $path_dir . $new_image_name;
+            file_put_contents($imgPath, $data);
+            $image_name = $new_image_name;
+        }
+
+        elseif (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
+            if (!empty($image_name)) {
+                @unlink($path_dir . $image_name);
             }
 
             $file_name = $_FILES['picture']['name'];
             $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $date = date("Ymd_His");
-            $new_image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
+            $new_image_name = uniqid(date("Ymd_His") . "_", true) . '.' . $fileType;
             $imgPath = $path_dir . basename($new_image_name);
-            
+
             if (move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath)) {
                 $image_name = $new_image_name;
             }
         }
-    
-        // Appel au Repository pour mettre à jour le livre
+
         $StudentRepository->updateStudent(
             $id_student,
             htmlspecialchars($_POST["lastname"]),
@@ -120,8 +124,10 @@ class StudentController extends Controller {
             htmlspecialchars($_POST["address"]),
             $image_name
         );
+
         header("Location: ?controller=student&action=listStudent");
     }
+
     public function detailStudent() {
         $StudentRepository = new StudentRepository();
         $id_student=$_GET['id'];

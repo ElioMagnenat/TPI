@@ -1,53 +1,84 @@
-document.getElementById('formLoan').addEventListener('submit', function(event) {
-    // Récupération des champs
-    const studentId = document.getElementById('studentId');
-    const startDate = document.getElementById('startDate');
-    const expectedReturnDate = document.getElementById('expectedReturnDate');
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("formStudent");
 
-    // Messages d'erreur
-    const errorStudentId = document.getElementById('errorStudentId');
-    const errorStartDate = document.getElementById('errorStartDate');
-    const errorExpectedReturnDate = document.getElementById('errorExpectedReturnDate');
+    if (!form) return;
 
-    // Réinitialisation
-    errorStudentId.style.display = 'none';
-    errorStartDate.style.display = 'none';
-    errorExpectedReturnDate.style.display = 'none';
+    form.addEventListener("submit", function (event) {
+        let isValid = true;
 
-    let valid = true;
+        // Réinitialisation
+        clearError("lastname");
+        clearError("firstname");
+        clearError("entry_date");
+        clearError("validity_date");
+        clearError("picture");
 
-    // Vérifie qu’un élève est sélectionné
-    if (studentId.value === '') {
-        errorStudentId.style.display = 'block';
-        valid = false;
-    }
+        // Vérification : nom
+        const lastname = document.getElementById("lastname");
+        if (!lastname.value.trim()) {
+            showError("lastname", "Le nom est requis.");
+            isValid = false;
+        }
 
-    // Vérifie que la date d’emprunt est remplie
-    if (startDate.value === '') {
-        errorStartDate.style.display = 'block';
-        valid = false;
-    }
+        // Vérification : prénom
+        const firstname = document.getElementById("firstname");
+        if (!firstname.value.trim()) {
+            showError("firstname", "Le prénom est requis.");
+            isValid = false;
+        }
 
-    // Vérifie que la date de retour est remplie
-    if (expectedReturnDate.value === '') {
-        errorExpectedReturnDate.textContent = 'Veuillez indiquer une date de retour';
-        errorExpectedReturnDate.style.display = 'block';
-        valid = false;
-    }
+        // Vérification : date d'entrée
+        const entryDate = document.getElementById("entry_date");
+        if (!entryDate.value.trim()) {
+            showError("entry_date", "La date d'entrée est requise.");
+            isValid = false;
+        }
 
-    // Vérifie que la date de retour est après la date d’emprunt
-    if (startDate.value !== '' && expectedReturnDate.value !== '') {
-        const start = new Date(startDate.value);
-        const end = new Date(expectedReturnDate.value);
+        // Vérification : date de validité
+        const validityDate = document.getElementById("validity_date");
+        if (!validityDate.value.trim()) {
+            showError("validity_date", "La date de validité est requise.");
+            isValid = false;
+        }
 
-        if (end <= start) {
-            errorExpectedReturnDate.textContent = 'La date de retour doit être après la date d\'emprunt';
-            errorExpectedReturnDate.style.display = 'block';
-            valid = false;
+        // Vérification : photo (obligatoire uniquement pour le formulaire d'ajout)
+        const picture = document.getElementById("imageInput");
+        const isModification = form.action.includes("updateStudent");
+        if (!isModification && picture.files.length === 0) {
+            showError("picture", "La photo est obligatoire.");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+
+    function showError(fieldId, message) {
+        const span = document.getElementById("error" + capitalize(fieldId));
+        if (span) {
+            span.textContent = message;
+            span.style.display = "block";
+        }
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.classList.add("is-invalid");
         }
     }
 
-    if (!valid) {
-        event.preventDefault(); // Empêche l'envoi si non valide
+    function clearError(fieldId) {
+        const span = document.getElementById("error" + capitalize(fieldId));
+        if (span) {
+            span.textContent = "";
+            span.style.display = "none";
+        }
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.classList.remove("is-invalid");
+        }
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 });

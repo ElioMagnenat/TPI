@@ -17,6 +17,7 @@
                     <th>Date d'entrée</th>
                     <th>Date de validité</th>
                     <th>Etablissement</th>
+                    <th>Statut</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -29,6 +30,11 @@
                     <td><?= $student['entry_date'] ? (new DateTime($student['entry_date']))->format('d/m/Y') : '' ?></td>
                     <td><?= $student['validity_date'] ? (new DateTime($student['validity_date']))->format('d/m/Y') : '' ?></td>
                     <td><?= $student['institution'] ?></td>
+                    <?php if(new DateTime($student['validity_date']) < new DateTime()) {?>
+                        <td>Désactivé</td>
+                    <?php } else { ?>
+                        <td>Actif</td>
+                    <?php }?>
                     <td class="text-center">
                         <div class="d-flex justify-content-around gap-2">
                             <a href="?controller=student&action=detailStudent&id=<?= $student['id_student'] ?>" title="Détail">
@@ -50,34 +56,86 @@
     </div>
 </div>
 <script>
-    // Initialiser DataTables
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            columnDefs: [
-                { type: 'date-euro', targets: [3, 4] }
-            ],
-            paging: true,
-            searching: true,
-            info: true,
-            lengthChange: false,
-            ordering: true,
-            autoWidth: false,
-            scrollX: true,
-            language: {
-                search: "Rechercher :",
-                zeroRecords: "Aucun élève trouvé",
-                lengthMenu: "Afficher _MENU_ entrées",
-                info: "Affichage de _START_ à _END_ sur _TOTAL_ élèves",
-                infoFiltered: "(filtré à partir de _MAX_ élèves)",
-                infoEmpty: "Aucune entrée disponible",
-                paginate: {
-                    first: "Premier",
-                    last: "Dernier",
-                    next: "Suivant",
-                    previous: "Précédent"
+$(document).ready(function() {
+    var table = $('#dataTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                text: 'Exporter en PDF',
+                className: 'export-pdf-btn',
+                exportOptions: {
+                    columns: ':not(:last-child)'
                 }
             }
+        ],
+        columnDefs: [
+            { type: 'date-euro', targets: [3, 4] } // Adapter selon tes colonnes date
+        ],
+        paging: true,
+        searching: true,
+        info: true,
+        lengthChange: false,
+        ordering: true,
+        autoWidth: false,
+        scrollX: true,
+        language: {
+            search: "Rechercher :",
+            zeroRecords: "Aucun élève trouvé",
+            lengthMenu: "Afficher _MENU_ entrées",
+            info: "Affichage de _START_ à _END_ sur _TOTAL_ élèves",
+            infoFiltered: "(filtré à partir de _MAX_ élèves)",
+            infoEmpty: "Aucune entrée disponible",
+            paginate: {
+                first: "Premier",
+                last: "Dernier",
+                next: "Suivant",
+                previous: "Précédent"
+            },
+            select: {
+                rows: {
+                    _: "%d lignes sélectionnées",
+                    0: "Cliquez sur une ligne pour la sélectionner",
+                    1: "1 ligne sélectionnée"
+                }
+            }
+        }
+    });
+
+    // Filtres initiaux (statuts à afficher)
+    var activeFilters = ["Actif"];
+
+    // Boutons de filtre personnalisés (Statut élève, colonne 5)
+    const btnsHtml = `
+        <span class="d-flex align-items-center text-muted">
+            <i class="fas fa-filter me-2"></i>Filtres :
+        </span>
+        <button type="button" class="btn filter-btn active btn-primary" data-filter="Actif">Actif</button>
+        <button type="button" class="btn filter-btn btn-outline-secondary" data-filter="Désactivé">Désactivé</button>
+    `;
+    $('.dataTables_filter').append(btnsHtml);
+
+    // Appliquer le filtre initial
+    table.column(6).search(activeFilters.join('|'), true, false).draw();
+
+    // Interaction avec les filtres
+    $(document).on('click', '.filter-btn', function () {
+        var filter = $(this).data('filter');
+        var index = activeFilters.indexOf(filter);
+        if (index === -1) {
+            activeFilters.push(filter);
+            $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
+        } else {
+            activeFilters.splice(index, 1);
+            $(this).removeClass('active btn-primary').addClass('btn-outline-secondary');
+        }
+
+        if (activeFilters.length > 0) {
+            table.column(6).search(activeFilters.join('|'), true, false).draw();
+        } else {
+            table.column(6).search('').draw();
+        }
     });
 });
-
 </script>
+

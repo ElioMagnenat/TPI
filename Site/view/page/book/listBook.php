@@ -1,6 +1,11 @@
 <div class="card shadow mb-4 mt-4">
     <div class="card-header py-3 d-flex justify-content-between header-liste">
-        <h3 class="m-0 font-weight-bold text-primary">Catalogue</h3>
+        <div>
+            <h3 class="m-0 font-weight-bold text-primary">Catalogue</h3>
+            <small class="text-muted fst-italic d-block mt-1">
+                Astuce : maintenez <strong>Shift</strong> pour combiner plusieurs filtres et affiner votre recherche.
+            </small>
+        </div>
         <div>
             <button onclick="location.href='?controller=book&action=addFormBook'" class="btn btn-outline-primary mt-3">Ajouter un livre</button>
             <button id="actionSelected" class="btn btn-outline-primary mt-3">Emprunter</button>
@@ -165,10 +170,10 @@ $(document).ready(function() {
 table.on('user-select', function (e, dt, type, cell, originalEvent) {
     if (type === 'row') {
         var row = table.row(cell.index().row).node();
-        var status = $(row).find('td:eq(6)').text().trim(); // Colonne statut
+        var status = $(row).find('td:eq(6)').text().trim();
 
         if (status !== "En rayon") {
-            e.preventDefault(); // ❌ bloque la sélection
+            e.preventDefault();
         }
     }
 });

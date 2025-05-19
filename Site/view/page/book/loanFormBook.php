@@ -31,11 +31,12 @@
                     <label for="studentId" class="form-label">Élève</label>
                     <select class="form-control" name="studentId" id="studentId">
                         <option value="">-- Sélectionner un élève --</option>
-                        <?php foreach ($students as $student): ?>
-                            <option value="<?= $student['id_student'] ?>">
-                                <?= $student['id_student'].'. '. ' ' . $student['firstname'] . ' ' . $student['lastname'] ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <?php foreach ($students as $student){ 
+                            if(new DateTime($student['validity_date']) >= new DateTime()) {?>
+                                <option value="<?= $student['id_student'] ?>">
+                                    <?= $student['id_student'].'. '. ' ' . $student['firstname'] . ' ' . $student['lastname'] ?>
+                                </option>
+                        <?php }} ?>
                     </select>
                     <span id="errorStudentId" class="invalid-feedback" style="display: none;">Veuillez sélectionner un élève</span>
                 </div>

@@ -44,20 +44,15 @@ class BookController extends Controller {
         $image_name = "";
         $path_dir = "./ressources/img/book/";
 
-        if (isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
-            $file_name = $_FILES['picture']['name'];
-            $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (!empty($_POST['cropped_picture'])) {
+            $data = $_POST['cropped_picture'];
+            $data = str_replace('data:image/jpeg;base64,', '', $data);
+            $data = base64_decode($data);
 
-            if (in_array($fileType, $allowedTypes)) {
-                $date = date("Ymd_His");
-                $image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
-                $imgPath = $path_dir . $image_name;
-                move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath);
-            }
+            $image_name = uniqid('book_', true) . '.jpg';
+            file_put_contents($path_dir . $image_name, $data);
         }
 
-        $status = 1;
         $BookRepository = new BookRepository();
         $BookRepository->addBook(
             htmlspecialchars($_POST["title"]),
@@ -66,13 +61,14 @@ class BookController extends Controller {
             htmlspecialchars($_POST["reference"]),
             htmlspecialchars($_POST["location"]),
             htmlspecialchars($_POST["comment"]),
-            $image_name,
+            htmlspecialchars($image_name),
             htmlspecialchars($_POST["category"]),
-            $status
+            1
         );
 
         header("Location: ?controller=book&action=listBook");
     }
+
 
     public function editFormBook(){
         $BookRepository = new BookRepository();
@@ -91,30 +87,31 @@ class BookController extends Controller {
         $BookRepository = new BookRepository();
         $book = $BookRepository->getBook($id_book);
         $image_name = $book[0]['photo']; // Image actuelle
-
         $status = $book[0]['id_status'];
-    
-        // Si une nouvelle image est envoyée
-        if(isset($_FILES['picture']) && $_FILES['picture']['error'] === UPLOAD_ERR_OK) {
-            $path_dir = "./ressources/img/book/";
+        $path_dir = "./ressources/img/book/";
 
-            if (!empty($image_name)){
-                unlink($path_dir . $image_name);
+        // Si une image croppée est envoyée
+        if (!empty($_POST['cropped_picture'])) {
+            if (!empty($image_name)) {
+                unlink($path_dir . $image_name); // Supprime l'ancienne image
             }
 
-            $file_name = $_FILES['picture']['name'];
-            $fileType = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $date = date("Ymd_His");
-            $new_image_name = str_replace(".", "", uniqid($date . "_", true)) . '.' . $fileType;
-            $imgPath = $path_dir . basename($new_image_name);
-            
-            if (move_uploaded_file($_FILES['picture']['tmp_name'], $imgPath)) {
-                $image_name = $new_image_name;
-            }
+            $data = $_POST['cropped_picture'];
+            $data = str_replace('data:image/jpeg;base64,', '', $data);
+            $data = base64_decode($data);
+            $image_name = uniqid('book_', true) . '.jpg';
+
+
+            file_put_contents($path_dir . $image_name, $data);
         }
-        if(isset($_POST['removeBook']) && $_POST['removeBook'] == 'on'){
-            $status=4;
+
+        // Retrait ou remise en rayon
+        if (isset($_POST['removeBook']) && $_POST['removeBook'] == 'on') {
+            $status = 4;
+        } elseif ($status == 4) {
+            $status = 1;
         }
+
         $BookRepository->updateBook(
             $id_book,
             htmlspecialchars($_POST["title"]),
@@ -127,8 +124,10 @@ class BookController extends Controller {
             htmlspecialchars($_POST["category"]),
             $status
         );
+
         header("Location: ?controller=book&action=listBook");
     }
+
     public function detailBook() {
         $BookRepository = new BookRepository();
         $id_book=$_GET['id'];

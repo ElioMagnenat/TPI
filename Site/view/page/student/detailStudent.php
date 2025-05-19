@@ -18,7 +18,7 @@
                 <p><strong>Date de naissance :</strong> <?= (new DateTime($student[0]['birthdate']))->format('d/m/Y') ?></p>
                 <p><strong>Institution :</strong> <?= $student[0]['institution'] ?></p>
                 <p><strong>Date d'entrée :</strong> <?= (new DateTime($student[0]['entry_date']))->format('d/m/Y') ?></p>
-                <p><strong>Date de validation :</strong> <?= (new DateTime($student[0]['validity_date']))->format('d/m/Y') ?></p>
+                <p><strong>Date de validité :</strong> <?= (new DateTime($student[0]['validity_date']))->format('d/m/Y') ?></p>
                 <p><strong>Téléphone :</strong> <?= $student[0]['phone'] ?></p>
                 <p><strong>Adresse :</strong> <?= nl2br($student[0]['address']) ?></p>
 

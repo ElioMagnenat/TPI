@@ -273,7 +273,7 @@ class Database
     }
     public function getStudentNames ()
     {
-        $req = $this->connector->prepare("SELECT id_student, lastname, firstname FROM student");
+        $req = $this->connector->prepare("SELECT id_student, lastname, firstname, validity_date  FROM student");
         $req->execute();
         return $req;
     }
