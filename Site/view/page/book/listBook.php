@@ -1,9 +1,10 @@
+<?php include './view/Modal.php'; ?>
 <div class="card shadow mb-4 mt-4">
     <div class="card-header py-3 d-flex justify-content-between header-liste">
         <div>
             <h3 class="m-0 font-weight-bold text-primary">Catalogue</h3>
             <small class="text-muted fst-italic d-block mt-1">
-                Astuce : maintenez <strong>Shift</strong> pour combiner plusieurs filtres et affiner votre recherche.
+                Astuce : maintenez <strong>Shift</strong> sur les en-têtes de colonnes pour combiner plusieurs tris et affiner votre recherche.
             </small>
         </div>
         <div>
@@ -76,6 +77,7 @@ $(document).ready(function() {
         dom: 'Bfrtip',
         buttons: [
             {
+                filename: 'Catalogue_BiblioSolidaire',
                 extend: 'pdfHtml5',
                 text: 'Exporter en PDF',
                 className: 'export-pdf-btn',

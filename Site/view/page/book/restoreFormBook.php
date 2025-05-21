@@ -6,7 +6,7 @@
         <div class="card-body">
             <form id="formRestore" method="post" action="?controller=loan&action=closeLoan&id=<?= $id_loan[0]['id_loan'] ?>">
                 <div class="mb-3">
-                    <label for="returnDate" class="form-label">Date de rendu</label>
+                    <label for="returnDate" class="form-label">Date de rendu*</label>
                     <input type="date" class="form-control" name="returnDate" id="returnDate" value="<?= date('Y-m-d') ?>">
                     <span id="errorReturnDate" class="invalid-feedback" style="display: none;">Veuillez indiquer une date de rendu</span>
                 </div>

@@ -1,6 +1,12 @@
+<?php include './view/Modal.php'; ?>
 <div class="card shadow mb-4 mt-4">
     <div class="card-header py-3 d-flex justify-content-between header-liste">
-        <h3 class="m-0 font-weight-bold text-primary">Élèves</h3>
+        <div>
+            <h3 class="m-0 font-weight-bold text-primary">Élèves</h3>
+            <small class="text-muted fst-italic d-block mt-1">
+                Astuce : maintenez <strong>Shift</strong> pour combiner plusieurs tris et affiner votre recherche.
+            </small>
+        </div>
         <div>
             <button onclick="location.href='?controller=student&action=addFormStudent'" class="btn btn-outline-primary mt-3">Ajouter un élève</button>       
         </div>

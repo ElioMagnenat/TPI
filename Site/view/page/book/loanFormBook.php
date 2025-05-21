@@ -28,7 +28,7 @@
         <div class="card-body">
             <form id="formLoan" method="post" action="?controller=loan&action=newLoan&ids=<?= htmlspecialchars($_GET['ids'] ?? $bookTitle[0]['id_book']) ?>">
                 <div class="mb-3">
-                    <label for="studentId" class="form-label">Élève</label>
+                    <label for="studentId" class="form-label">Élève*</label>
                     <select class="form-control" name="studentId" id="studentId">
                         <option value="">-- Sélectionner un élève --</option>
                         <?php foreach ($students as $student){ 
@@ -41,12 +41,12 @@
                     <span id="errorStudentId" class="invalid-feedback" style="display: none;">Veuillez sélectionner un élève</span>
                 </div>
                 <div class="mb-3">
-                    <label for="startDate" class="form-label">Date d'emprunt</label>
+                    <label for="startDate" class="form-label">Date d'emprunt*</label>
                     <input type="date" class="form-control" name="startDate" id="startDate" value="<?php echo date('Y-m-d'); ?>">
                     <span id="errorStartDate" class="invalid-feedback" style="display: none;">Veuillez indiquer une date d'emprunt</span>
                 </div>
                 <div class="mb-3">
-                    <label for="expectedReturnDate" class="form-label">Date prévue de retour</label>
+                    <label for="expectedReturnDate" class="form-label">Date prévue de retour*</label>
                     <input type="date" class="form-control" name="expectedReturnDate" id="expectedReturnDate" value ="<?php echo date('Y-m-d', strtotime('+1 month'));?>">
                     <span id="errorExpectedReturnDate" class="invalid-feedback" style="display: none;"></span>
                 </div>

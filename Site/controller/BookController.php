@@ -65,7 +65,7 @@ class BookController extends Controller {
             htmlspecialchars($_POST["category"]),
             1
         );
-
+        $_SESSION['popup_message'] = "Le livre ".$_POST["title"]." a bien été ajouté !";
         header("Location: ?controller=book&action=listBook");
     }
 
@@ -124,7 +124,7 @@ class BookController extends Controller {
             htmlspecialchars($_POST["category"]),
             $status
         );
-
+        $_SESSION['popup_message'] = "Le livre a bien été modifié !";
         header("Location: ?controller=book&action=listBook");
     }
 
@@ -146,12 +146,14 @@ class BookController extends Controller {
         $book = $BookRepository->removeBook($id_book);
         $category = $BookRepository->getCategory($book[0]['fk_category']);
         $book[0]['category'] = $category[0]['name'] ;
+        $_SESSION['popup_message'] = "Le livre a bien été suprrimé !";
         header("Location: ?controller=book&action=listBook");
     }
     public function reinstate() {
         $id_book=htmlspecialchars($_GET['id']);
         $BookRepository = new BookRepository();
         $BookRepository->updateStatus($id_book, 1);
+        $_SESSION['popup_message'] = "Le livre a bien été modifié !";
         header("Location: ?controller=book&action=listBook");
     }
     public function exportDatabase() {
@@ -187,7 +189,7 @@ class BookController extends Controller {
             $command = "cmd /c \"$mysqlPath\" -h $host -u $user -p$pass $db < \"$tmpPath\"";
             system($command, $returnCode);
         }
-
+        $_SESSION['popup_message'] = "Les données ont bien été importées !";
         header("Location: ?controller=book&action=listBook");
     }
 }

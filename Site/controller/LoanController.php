@@ -59,7 +59,7 @@ class LoanController extends Controller {
                 $BookRepository->updateStatus($id_book, 2);
             }
         }
-
+        $_SESSION['popup_message'] = "L'emprunt a bien été effectué !";
         header("Location: ?controller=book&action=listBook");
     }
     public function restoreFormBook() {
@@ -87,7 +87,7 @@ class LoanController extends Controller {
         $id_book = $LoanRepository->getIdBook(htmlspecialchars($id_loan));
         $BookRepository = new BookRepository();
         $BookRepository->updateStatus($id_book[0]['fk_book'], 1);
-
+        $_SESSION['popup_message'] = "Le rendu a bien été effectué !";
         header("Location: ?controller=book&action=listBook");
     }
     

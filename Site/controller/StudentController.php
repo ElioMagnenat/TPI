@@ -56,7 +56,7 @@ class StudentController extends Controller {
         htmlspecialchars($_POST["address"]),
         $imgPath
     );
-
+    $_SESSION['popup_message'] = "L'élève a bien été créé !";
     // Redirection
     header("Location: ?controller=student&action=listStudent");
 }
@@ -124,7 +124,7 @@ class StudentController extends Controller {
             htmlspecialchars($_POST["address"]),
             $image_name
         );
-
+        $_SESSION['popup_message'] = "L'élève a bien été modifié !";
         header("Location: ?controller=student&action=listStudent");
     }
 
@@ -145,6 +145,7 @@ class StudentController extends Controller {
         $StudentRepository = new StudentRepository();
         $id_student=$_GET['id'];
         $student = $StudentRepository->removeStudent($id_student);
+        $_SESSION['popup_message'] = "L'élève a bien été supprimé !";
         header("Location: ?controller=student&action=listStudent");
     }
 }
