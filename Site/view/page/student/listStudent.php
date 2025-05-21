@@ -67,6 +67,7 @@ $(document).ready(function() {
         dom: 'Bfrtip',
         buttons: [
             {
+                filename: 'Liste_Eleves_BiblioSolidaire',
                 extend: 'pdfHtml5',
                 text: 'Exporter en PDF',
                 className: 'export-pdf-btn',
