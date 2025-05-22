@@ -156,41 +156,54 @@ class BookController extends Controller {
         $_SESSION['popup_message'] = "Le livre a bien été modifié !";
         header("Location: ?controller=book&action=listBook");
     }
-    public function exportDatabase() {
+        public function exportDatabase() {
+        // Informations de connexion à la base de données
         $user = 'bibliosolidaire';
         $pass = 'bibliosolidaire';
         $db = 'db_bibliosolidaire';
         $host = 'localhost';
+
+        // Génère un nom de fichier avec la date et l'heure actuelle
         $filename = 'export_biblio_' . date('Ymd_His') . '.sql';
         $filePath = './ressources/exports/' . $filename;
 
+        // Chemin vers le fichier mysqldump.exe utilisé pour l'export
         $mysqldumpPath = './ressources/exports/mysqldump.exe';
 
+        // Commande pour faire un dump de la db dans un fichier SQL
         $command = "\"$mysqldumpPath\" -h $host -u $user -p$pass $db > \"$filePath\"";
-
         system($command);
 
-        if (file_exists($filePath)) {
-            header('Content-Description: File Transfer');
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            readfile($filePath);
-            unlink($filePath);
-        }
-    }
-    public function importDatabase() {
-        if (isset($_FILES['sql_file'])) {
-            $tmpPath = $_FILES['sql_file']['tmp_name'];
-            $user = 'bibliosolidaire';
-            $pass = 'bibliosolidaire';
-            $db = 'db_bibliosolidaire';
-            $host = 'localhost';
+        // Prépare le téléchargement
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        readfile($filePath);
 
-            $mysqlPath = realpath(__DIR__ . '/../ressources/import/mysql.exe');
-            $command = "cmd /c \"$mysqlPath\" -h $host -u $user -p$pass $db < \"$tmpPath\"";
-            system($command, $returnCode);
-        }
-        $_SESSION['popup_message'] = "Les données ont bien été importées !";
-        header("Location: ?controller=book&action=listBook");
+        // Supprime le fichier du site après le téléchargement
+        unlink($filePath);
+    }
+
+    public function importDatabase() {
+    // Récupère le chemin temporaire du fichier SQL
+    $tmpPath = $_FILES['sql_file']['tmp_name'];
+
+    // Informations de connexion à la base de données
+    $user = 'bibliosolidaire';
+    $pass = 'bibliosolidaire';
+    $db = 'db_bibliosolidaire';
+    $host = 'localhost';
+
+    // Chemin vers le fichier mysql.exe
+    $mysqlPath = './ressources/import/mysql.exe';
+
+    // Commande pour importer les données
+    $command = "cmd /c \"$mysqlPath\" -h $host -u $user -p$pass $db < \"$tmpPath\"";
+    system($command, $returnCode);
+
+    $_SESSION['popup_message'] = "Les données ont bien été importées !";
+
+    // Redirection vers la liste des livres
+    header("Location: ?controller=book&action=listBook");
     }
 }
 ?>

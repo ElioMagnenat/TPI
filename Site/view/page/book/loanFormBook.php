@@ -8,7 +8,7 @@
                 <?php } ?>
             </h4>
         </div>
-<?php if (!empty($bookTitle)): ?>
+<?php if (!empty($bookTitle) && count($bookTitle) > 1): ?>
     <div class="card border-start border-primary border-3 mb-4 shadow-sm">
         <div class="card-header bg-white">
             <h5 class="mb-0 text-primary">

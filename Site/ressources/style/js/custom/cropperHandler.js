@@ -43,9 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         responsive: true, // Redimensionne le cropper automatiquement si la fenêtre change de taille.
         
         autoCropArea: 1, // Le cadre de recadrage occupe 100 % de la zone disponible à l'ouverture.
-        
-        movable: true, // Permet de déplacer l’image dans le cadre (utile si le cadre est fixe).
-        
+                
         rotatable: true, // Autorise la rotation de l’image.
 
         ready() {
