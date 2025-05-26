@@ -67,7 +67,6 @@ class Database
                 status ON book.fk_status = status.id_status
             ORDER BY 
                 book.title ASC;
-
         ");
         $req->execute();
         return $req;
